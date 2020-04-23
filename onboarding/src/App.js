@@ -1,9 +1,8 @@
 import React, {useState,useEffect} from 'react';
 import * as yup from 'yup';
 import styled from 'styled-components';
-
-
 import axios from 'axios';
+
 import './App.css';
 import Form from './components/Form'
 import Members from './components/Members'
@@ -14,7 +13,7 @@ import Members from './components/Members'
 function App() {
 
   const initialValues = {
-    first_name: '',
+    fname: '',
     email:'',
     password:'',
     terms:false,
@@ -49,6 +48,7 @@ function App() {
       ...formData,
       [name]:value
     })
+    
   
   }
   
@@ -57,7 +57,7 @@ function App() {
     axios.post(url,formData)
     .then(res=>{
       setMembers([...members,res.data])
-      setFormData(initialValues)
+      
       
     })
 
@@ -66,6 +66,7 @@ function App() {
     })
     
     getMembers()
+    setFormData(initialValues)
     
     
   }
@@ -102,13 +103,13 @@ function App() {
   
 
   const formSchema = yup.object().shape({
-    first_name: yup
+    fname: yup
       .string()
-      .min(3, 'username must have at least 3 characters!')
-      .required('username is required!'),
+      .min(3, 'Name must have at least 3 characters!')
+      .required('Name is required!'),
     email: yup
       .string()
-      .email('a VALID email is required')
+      .email('Please add a valid Email')
       .required('email is required'),
     password:yup
       .string()
@@ -126,27 +127,48 @@ function App() {
       })
   }, [formData])
 
+const Div = styled.div `
+  display:flex;
+  justify-content:space-around;
+  width:90%;
+  margin: 0 auto;
+  background:lightcoral;
 
+  border-radius:5px;
+  padding:10%;
+  flex-wrap:wrap;
+
+
+
+`
 
   
 
   return (
-    <div className="App">
-     <Form 
-     onSubmitHandle={onSubmitHandle}
-     onChangeHandle={onChangeHandle}
-     formData={formData}
-     onChecked={onChecked}
-     formErrors={formErrors}
-     valid = {valid}
-     
-     />
-
-     {members.map(member=>{
-      return <Members key={member.id} member={member}/>
+   <div>
+      <Form 
+         onSubmitHandle={onSubmitHandle}
+         onChangeHandle={onChangeHandle}
+         formData={formData}
+         onChecked={onChecked}
+         formErrors={formErrors}
+         valid = {valid}
+         />
+      
        
-     })}
-    </div>
+     
+       <Div>
+       
+         
+         
+      
+         {members.map(member=>{
+          return <Members key={member.id} member={member}/> 
+         })}
+       </Div>
+     
+   </div>
+    
   );
 }
 
